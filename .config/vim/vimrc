@@ -1,0 +1,70 @@
+" Disable vi mode
+set nocompatible
+
+" environment
+set directory=~/.cache/vim/swap
+set viminfo+=n~/.cache/vim/info
+set backupdir=~/.cache/vim/backup
+set runtimepath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim90,~/.config/vim/after
+set packpath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim90,~/.config/vim/after
+
+set autochdir
+filetype on
+filetype plugin indent on
+
+" visuals
+" colorscheme gruvbox
+" set background=dark
+syntax on
+
+" line numbers
+set scrolloff=12
+set number
+" set cursorline
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set relativenumber   | endif
+:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set norelativenumber | endif
+:augroup END
+
+" whitespace
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+" set autoindent
+set smarttab
+set listchars=tab:→\ ,trail:·
+set list
+
+" search
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+
+source ~/.config/vim/netrw.vim
+source ~/.config/vim/tabs.vim
+
+" flagship.vim
+let g:tablabel =
+      \ "%N%{flagship#tabmodified()} %{flagship#tabcwds('shorten',',')}"
+set laststatus=2
+set showtabline=1
+set guioptions-=e
+
+" bindings
+" nmap gs :Git<CR>
+
+" https://vimways.org/2019/vim-and-the-working-directory/
+nnoremap <leader>cd :lcd %:h<CR>
+
+" fold `zc`/`zC` and `zm`/`zM`, unfold `zo`/`zO` and `zr`/`zR`
+set foldmethod=syntax
+
+" https://superuser.com/questions/567352/how-can-i-set-foldlevelstart-in-vim-to-just-fold-nothing-initially-still-allowi
+:autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))

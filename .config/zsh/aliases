@@ -1,0 +1,31 @@
+# ~/.config/zsh/aliases
+
+alias ls="lsd"
+alias l="lsd -lg"
+alias la="lsd -Alg"
+alias lt="lsd --tree --depth 2"
+alias ltt="lsd --tree --depth 3"
+
+alias ga="git add"
+alias gss="git status"
+alias gb="git branch -v"
+alias gc="git commit"
+alias gcp="git cherry-pick"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias gp="git push"
+alias gh="git checkout"
+alias gl="git log"
+alias gr="git rebase"
+alias gls='git ls-tree --full-tree --name-only -r HEAD'
+
+alias d="docker"
+alias dl="docker logs"
+alias dc="docker compose"
+alias dcl="docker compose logs --no-log-prefix"
+alias dn="docker network"
+alias dv="docker volume"
+
+alias k="kubectl"
+
+alias p="pnpm"
