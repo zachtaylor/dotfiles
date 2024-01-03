@@ -12,6 +12,9 @@ set autochdir
 filetype on
 filetype plugin indent on
 
+set timeoutlen=1000
+set ttimeoutlen=5
+
 " visuals
 " colorscheme gruvbox
 " set background=dark
@@ -51,8 +54,7 @@ source ~/.config/vim/netrw.vim
 source ~/.config/vim/tabs.vim
 
 " flagship.vim
-let g:tablabel =
-      \ "%N%{flagship#tabmodified()} %{flagship#tabcwds('shorten',',')}"
+let g:tablabel = "%N%{flagship#tabmodified()} %{flagship#tabcwds('shorten',',')}"
 set laststatus=2
 set showtabline=1
 set guioptions-=e

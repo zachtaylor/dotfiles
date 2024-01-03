@@ -103,14 +103,16 @@ function set-prompt-1() {
     fi
   fi
 
+  [[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
+
   if [ $vcs_info_msg_0_ ]; then
     if [[ $(pwd) =~ "$HOME/*" ]]; then
-      PROMPT="%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_} $ "
+      PROMPT="${ssh_auth}%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_} $ "
     else
-      PROMPT="%F{blue} ${$(pwd)%/*}/%f${vcs_info_msg_0_} $ "
+      PROMPT="${ssh_auth}%F{blue} ${$(pwd)%/*}/%f${vcs_info_msg_0_} $ "
     fi
   else
-    PROMPT="%F{blue}%~%f $ "
+    PROMPT="${ssh_auth}%F{blue}%~%f $ "
   fi
 
   RPROMPT="%F{yellow}${elapsed}%f %*"
