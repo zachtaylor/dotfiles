@@ -10,7 +10,7 @@ nnoremap th :tabfirst<CR>
 nnoremap tj :tabprev<CR>
 nnoremap tk :tabnext<CR>
 nnoremap tl :tablast<CR>
-nnoremap tn :tabnew<Space>
+nnoremap tn :tabnew<CR>
 nnoremap tq :tabclose<CR>
 
 nnoremap <C-S-tab> :tabprevious<CR>

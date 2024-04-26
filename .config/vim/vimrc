@@ -2,40 +2,42 @@
 set nocompatible
 
 " environment
-set directory=~/.cache/vim/swap
+set nobackup
+set noswapfile
 set viminfo+=n~/.cache/vim/info
-set backupdir=~/.cache/vim/backup
-set runtimepath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim90,~/.config/vim/after
-set packpath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim90,~/.config/vim/after
+set runtimepath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim91,~/.config/vim/after
+set packpath=~/.config/vim,/usr/share/vim/vimfiles,/usr/share/vim/vim91,~/.config/vim/after
 
-set autochdir
-filetype on
-filetype plugin indent on
+syntax on
+filetype plugin on
+filetype indent on
 
-set timeoutlen=1000
+" set timeoutlen=1000
+" fix delay to return to normal mode
 set ttimeoutlen=5
 
-" visuals
-" colorscheme gruvbox
-" set background=dark
-syntax on
-
 " line numbers
-set scrolloff=12
 set number
-" set cursorline
+set scrolloff=16
 :augroup numbertoggle
 :  autocmd!
 :  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set relativenumber   | endif
 :  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set norelativenumber | endif
 :augroup END
 
+" code folding
+" globals: 'zm' / 'zr'
+" locals: 'zc' / 'zo'
+set foldcolumn=1
+set foldmethod=syntax
+
 " whitespace
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
-" set autoindent
+set autoindent
+set smartindent
 set smarttab
 set listchars=tab:→\ ,trail:·
 set list
@@ -49,24 +51,22 @@ set gdefault
 set incsearch
 set showmatch
 set hlsearch
+set wildmenu
 
 source ~/.config/vim/netrw.vim
 source ~/.config/vim/tabs.vim
+source ~/.config/vim/keybindings.vim
 
 " flagship.vim
-let g:tablabel = "%N%{flagship#tabmodified()} %{flagship#tabcwds('shorten',',')}"
-set laststatus=2
-set showtabline=1
-set guioptions-=e
+" let g:tablabel = "%N%{flagship#tabmodified()} %{flagship#tabcwds('shorten',',')}"
+" set laststatus=2
+" set showtabline=1
+" set guioptions-=e
 
-" bindings
-" nmap gs :Git<CR>
-
-" https://vimways.org/2019/vim-and-the-working-directory/
-nnoremap <leader>cd :lcd %:h<CR>
-
-" fold `zc`/`zC` and `zm`/`zM`, unfold `zo`/`zO` and `zr`/`zR`
-set foldmethod=syntax
+" code folding `zc`/`zC` and `zm`/`zM`, unfolding `zo`/`zO` and `zr`/`zR`
 
 " https://superuser.com/questions/567352/how-can-i-set-foldlevelstart-in-vim-to-just-fold-nothing-initially-still-allowi
 :autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
+
+
+
