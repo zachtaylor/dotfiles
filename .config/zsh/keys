@@ -1,0 +1,17 @@
+# .config/zsh/env
+
+bindkey -v
+
+# xfce terminal
+bindkey "^[[H" beginning-of-line # HOME
+bindkey "^[[F" end-of-line # END
+bindkey "^[[3~" delete-char # DELETE
+bindkey "^H" backward-kill-word # CTRL BACKSPACE
+bindkey "^[[3;5~" kill-word # CTRL DELETE
+bindkey "^[[1;5C" forward-word # CTRL ←
+bindkey "^[[1;5D" backward-word # CTRL →
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+# tmux
+bindkey "^[[1~" beginning-of-line # HOME
+bindkey "^[[4~" end-of-line # END

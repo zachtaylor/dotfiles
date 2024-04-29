@@ -1,10 +1,12 @@
 # ~/.config/zsh/aliases
 
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME'
+
 alias ls="lsd"
 alias l="lsd -lg"
 alias la="lsd -Alg"
-alias lt="lsd --tree --depth 2"
-alias ltt="lsd --tree --depth 3"
+alias lt="lsd --tree --depth 1"
+alias ltt="lsd --tree --depth 2"
 
 alias ga="git add"
 alias gss="git status"
@@ -31,3 +33,6 @@ alias dv="docker volume"
 alias k="kubectl"
 
 alias p="pnpm"
+
+alias v="vim"
+alias vi="vim"

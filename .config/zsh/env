@@ -1,0 +1,4 @@
+# ~/.config/zsh/env
+
+export KUBECONFIG=./config
+export VIMINIT='source ~/.config/vim/vimrc'

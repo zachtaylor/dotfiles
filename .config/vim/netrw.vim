@@ -11,16 +11,22 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 " preview (`v`) is alternate layout: large preview (multi pane)
 let g:netrw_altv = 1
-" 25% width
-let g:netrw_winsize = 25
+" width 30%
+let g:netrw_winsize = 30
 " hidden files hidden by default
 let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
 
 " augroup ProjectDrawer
 "   autocmd!
 "   autocmd TabNew * :Vexplore!
-" autocmd VimEnter * :Vexplore
+"   autocmd VimEnter * :Vexplore
 " augroup END
+
+" close netrw when leaving the buffer
+autocmd FileType netrw autocmd BufLeave <buffer> if &filetype == 'netrw' | :bd | endif
+
+" nnoremap - :Lexplore<CR>
+map <C-_> :Lexplore<CR>
 
 function! NetrwMapping()
   " h acts as up directory, left in sideways tree
@@ -35,3 +41,4 @@ augroup netrw_mapping
   autocmd!
   autocmd filetype netrw call NetrwMapping()
 augroup END
+
