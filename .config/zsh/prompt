@@ -23,12 +23,12 @@ add-zsh-hook precmd set-prompt-2
 	fi
 }
 
-precmd() { vcs_info }
-
 function preexec() {
 	CMD_START_TIME=$(date +%s%3N)
 }
 function precmd() {
+	vcs_info
+
 	if [ $CMD_START_TIME ]; then
 		local now=$(date +%s%3N)
 
