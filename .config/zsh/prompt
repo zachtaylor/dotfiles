@@ -12,108 +12,106 @@ zstyle ':vcs_info:git*' actionformats "%F{cyan}%r/%f%F{blue}%S%f [%F{cyan}%b%f (
 
 setopt prompt_subst no_prompt_{bang,subst} prompt_{cr,percent,sp}
 autoload -Uz add-zsh-hook
-# add-zsh-hook precmd set-prompt-2
-add-zsh-hook precmd set-prompt-1
+add-zsh-hook precmd set-prompt-2
+# add-zsh-hook precmd set-prompt-1
 
 +vi-untracked-git() {
-  if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-      hook_com[misc]='%F{magenta}?%f'
-  else
-      hook_com[misc]=''
-  fi
-}
-
-function preexec() {
-  timer=$(($(date +%s%0N)/1000000))
+	if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+			hook_com[misc]='%F{magenta}?%f'
+	else
+			hook_com[misc]=''
+	fi
 }
 
 precmd() { vcs_info }
 
+function preexec() {
+	CMD_START_TIME=$(date +%s%3N)
+}
+function precmd() {
+	if [ $CMD_START_TIME ]; then
+		local now=$(date +%s%3N)
+
+		local d_ms=$(($now - $CMD_START_TIME))
+		local d_s=$((d_ms / 1000))
+		local ms=$((d_ms % 1000))
+		local s=$((d_s % 60))
+		local m=$(((d_s / 60) % 60))
+		local h=$((d_s / 3600))
+		if ((h > 0)); then export CMD_DURATION_STR=${h}h${m}m
+		elif ((m > 0)); then export CMD_DURATION_STR=${m}m${s}s
+		elif ((s >= 10)); then export CMD_DURATION_STR=${s}.$((ms / 100))s
+		elif ((s > 0)); then export CMD_DURATION_STR=${s}.$((ms / 10))s
+		else export CMD_DURATION_STR=${ms}ms
+		fi
+
+		unset CMD_START_TIME
+	fi
+}
+
 function prompt-length() {
-  emulate -L zsh
-  local -i COLUMNS=${2:-COLUMNS}
-  local -i x y=${#1} m
-  if (( y )); then
-    while (( ${${(%):-$1%$y(l.1.0)}[-1]} )); do
-      x=y
-      (( y *= 2 ))
-    done
-    while (( y > x + 1 )); do
-      (( m = x + (y - x) / 2 ))
-      (( ${${(%):-$1%$m(l.x.y)}[-1]} = m ))
-    done
-  fi
-  typeset -g REPLY=$x
+	emulate -L zsh
+	local -i COLUMNS=${2:-COLUMNS}
+	local -i x y=${#1} m
+	if (( y )); then
+		while (( ${${(%):-$1%$y(l.1.0)}[-1]} )); do
+			x=y
+			(( y *= 2 ))
+		done
+		while (( y > x + 1 )); do
+			(( m = x + (y - x) / 2 ))
+			(( ${${(%):-$1%$m(l.x.y)}[-1]} = m ))
+		done
+	fi
+	typeset -g REPLY=$x
 }
 
 function fill-line() {
-  emulate -L zsh
-  prompt-length $1
-  local -i left_len=REPLY
-  prompt-length $2 9999
-  local -i right_len=REPLY
-  local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
-  if (( pad_len < 1 )); then
-    # Not enough space for the right part. Drop it.
-    typeset -g REPLY=$1
-  else
-    local pad=${(pl.$pad_len.. .)}  # pad_len spaces
-    typeset -g REPLY=${1}${pad}${2}
-  fi
+	emulate -L zsh
+	prompt-length $1
+	local -i left_len=REPLY
+	prompt-length $2 9999
+	local -i right_len=REPLY
+	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
+	if (( pad_len < 1 )); then
+		# Not enough space for the right part. Drop it.
+		typeset -g REPLY=$1
+	else
+		local pad=${(pl.$pad_len.. .)}  # pad_len spaces
+		typeset -g REPLY=${1}${pad}${2}
+	fi
+}
+
+function set-dir-vcs() {
+	if [ $vcs_info_msg_0_ ]; then
+		if [[ $(pwd) =~ "$HOME/*" ]]; then
+			dir="%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_}"
+		else
+			dir="%F{blue}${$(pwd)%/*}/%f${vcs_info_msg_0_}"
+		fi
+	else
+		dir="%F{blue}%~%f"
+	fi
 }
 
 function set-prompt-2() {
-  emulate -L zsh
+	[[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
+	local dir
+	set-dir-vcs
+	local top_left=" ${ssh_auth}${dir}"
+	local top_right="%F{yellow}${CMD_DURATION_STR}%f %*"
+	local bottom_left='%B%F{%(?.white.red)}$%f%b '
 
-  if [ $timer ]; then
-    local now=$(($(date +%s%0N)/1000000))
-    local duration=$(($now-$timer))
-
-    if (( $duration / 1000 >= 1 )); then
-      elapsed="$(duration / 1000)s"
-    else
-      elapsed="$(duration)ms"
-    fi
-  fi
-
-  local top_left='%F{blue}%~%f'
-  local top_right="%F{yellow}${elapsed}%f %t"
-  local bottom_left='%B%F{%(?.white.red)}%#%f%b '
-  local bottom_right="${vcs_info_msg_0_}"
-
-  local REPLY
-  fill-line "$top_left" "$top_right"
-  PROMPT=$REPLY$'\n'$bottom_left
-  RPROMPT=$bottom_right
+	local REPLY
+	fill-line "$top_left" "$top_right"
+	PROMPT=$REPLY$'\n'$bottom_left
+	unset RPROMPT
 }
 
 function set-prompt-1() {
-  emulate -L zsh
-
-  if [ $timer ]; then
-    local now=$(($(date +%s%0N)/1000000))
-    local duration_ms=$(($now-$timer))
-    unset timer
-    local duration_s=$(($duration_ms / 1000))
-
-    if [ $duration_s -gt 1 ]; then
-      local elapsed="${duration_s}s"
-    else
-      local elapsed="${duration_ms}ms"
-    fi
-  fi
-
-  [[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
-
-  if [ $vcs_info_msg_0_ ]; then
-    if [[ $(pwd) =~ "$HOME/*" ]]; then
-      PROMPT="${ssh_auth}%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_} $ "
-    else
-      PROMPT="${ssh_auth}%F{blue} ${$(pwd)%/*}/%f${vcs_info_msg_0_} $ "
-    fi
-  else
-    PROMPT="${ssh_auth}%F{blue}%~%f $ "
-  fi
-
-  RPROMPT="%F{yellow}${elapsed}%f %*"
+	[[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
+	local dir
+	set-dir-vcs
+	PROMPT="${ssh_auth}${dir} %B%F{%(?.white.red)}$%f%b "
+	RPROMPT="%F{yellow}${CMD_DURATION_STR}%f %*"
 }
