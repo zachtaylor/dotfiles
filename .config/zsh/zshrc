@@ -3,9 +3,6 @@
 bindkey -v
 setopt autocd
 
-# env
-export VIMINIT='source ~/.config/vim/vimrc'
-
 # history
 HISTFILE=~/.cache/zsh/history
 HISTSIZE=1000
@@ -29,6 +26,5 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # extra
 source ~/.config/zsh/aliases
-source ~/.config/zsh/env
 source ~/.config/zsh/keys
 source ~/.config/zsh/prompt

@@ -11,9 +11,15 @@ zstyle ':vcs_info:git*' formats "%F{cyan}%r [%b%f%m%u%c%F{cyan}]%f%F{blue}/%S%f"
 zstyle ':vcs_info:git*' actionformats "%F{cyan}%r/%f%F{blue}%S%f [%F{cyan}%b%f (%a) %m%u%c]"
 
 setopt prompt_subst no_prompt_{bang,subst} prompt_{cr,percent,sp}
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd set-prompt-2
-# add-zsh-hook precmd set-prompt-1
+
+function set_prompt {
+    ## Set the values of PROMPT and RPROMPT here
+    # Sample values given below
+    # PROMPT='%~'$'\n''%# '
+    # RPROMPT='%(?..%B%F{1}%?%f%b)'
+	# set-prompt-1
+		set-prompt-2
+}
 
 +vi-untracked-git() {
 	if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
@@ -28,6 +34,9 @@ function preexec() {
 }
 function precmd() {
 	vcs_info
+	local dir
+	set-dir-vcs
+	TRANSIENT_PROMPT="$dir $ "
 
 	if [ $CMD_START_TIME ]; then
 		local now=$(date +%s%3N)
@@ -71,9 +80,9 @@ function fill-line() {
 	prompt-length $1
 	local -i left_len=REPLY
 	prompt-length $2 9999
-	local -i right_len=REPLY
+	local -i right_len=REPLY # -1: don't count the newline char
 	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
-	if (( pad_len < 1 )); then
+	if (( pad_len < 2 )); then
 		# Not enough space for the right part. Drop it.
 		typeset -g REPLY=$1
 	else
@@ -83,22 +92,22 @@ function fill-line() {
 }
 
 function set-dir-vcs() {
+	[[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
 	if [ $vcs_info_msg_0_ ]; then
 		if [[ $(pwd) =~ "$HOME/*" ]]; then
-			dir="%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_}"
+			dir="${ssh_auth}%F{blue}~${${$(git rev-parse --show-toplevel)#${HOME}}%/*}/%f${vcs_info_msg_0_}"
 		else
-			dir="%F{blue}${$(pwd)%/*}/%f${vcs_info_msg_0_}"
+			dir="${ssh_auth}%F{blue}${$(pwd)%/*}/%f${vcs_info_msg_0_}"
 		fi
 	else
-		dir="%F{blue}%~%f"
+		dir="${ssh_auth}%F{blue}%~%f"
 	fi
 }
 
 function set-prompt-2() {
-	[[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
 	local dir
 	set-dir-vcs
-	local top_left=" ${ssh_auth}${dir}"
+	local top_left="${dir}"
 	local top_right="%F{yellow}${CMD_DURATION_STR}%f %*"
 	local bottom_left='%B%F{%(?.white.red)}$%f%b '
 
@@ -109,9 +118,71 @@ function set-prompt-2() {
 }
 
 function set-prompt-1() {
-	[[ $SSH_CONNECTION ]] && local ssh_auth='%F{2}%n@%M%f '
 	local dir
 	set-dir-vcs
-	PROMPT="${ssh_auth}${dir} %B%F{%(?.white.red)}$%f%b "
+	PROMPT="${dir} %B%F{%(?.white.red)}$%f%b "
 	RPROMPT="%F{yellow}${CMD_DURATION_STR}%f %*"
 }
+
+#### Transient prompt with transient newline before prompt
+
+[[ -c /dev/null ]]  ||  return
+zmodload zsh/system ||  return
+
+## Set the transient prompt PROMPT here -
+TRANSIENT_PROMPT='%# '   # Sample value
+
+typeset -g _transient_prompt_newline=
+function _transient_prompt_set_prompt {
+    set_prompt
+    PROMPT=$_transient_prompt_newline$PROMPT
+}; _transient_prompt_set_prompt
+
+zle -N clear-screen _transient_prompt_widget-clear-screen
+function _transient_prompt_widget-clear-screen {
+    _transient_prompt_newline=
+    zle .clear-screen
+}
+
+zle -N send-break _transient_prompt_widget-send-break
+function _transient_prompt_widget-send-break {
+    _transient_prompt_widget-zle-line-finish
+    zle .send-break
+}
+
+zle -N zle-line-finish _transient_prompt_widget-zle-line-finish
+function _transient_prompt_widget-zle-line-finish {
+    (( ! _transient_prompt_fd )) && {
+        sysopen -r -o cloexec -u _transient_prompt_fd /dev/null
+        zle -F $_transient_prompt_fd _transient_prompt_restore_prompt
+    }
+    zle && PROMPT=$TRANSIENT_PROMPT RPROMPT= zle reset-prompt && zle -R
+}
+
+function _transient_prompt_restore_prompt {
+    exec {1}>&-
+    (( ${+1} )) && zle -F $1
+    _transient_prompt_fd=0
+    _transient_prompt_set_prompt
+    zle reset-prompt
+    zle -R
+}
+
+(( ${+precmd_functions} )) || typeset -ga precmd_functions
+(( ${#precmd_functions} )) || {
+    do_nothing() {true}
+    precmd_functions=(do_nothing)
+}
+
+precmd_functions+=_transient_prompt_precmd
+function _transient_prompt_precmd {
+    # We define _transient_prompt_precmd in this way because we don't want
+    # _transient_prompt_newline to be defined on the very first precmd.
+    TRAPINT() { zle && _transient_prompt_widget-zle-line-finish; return $(( 128 + $1 )) }
+    function _transient_prompt_precmd {
+        TRAPINT() {zle && _transient_prompt_widget-zle-line-finish; return $(( 128 + $1 ))}
+        _transient_prompt_newline=$'\n'
+    }
+}
+
+# vim: sw=0 ts=4 sts=4 et
