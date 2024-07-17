@@ -1,12 +1,14 @@
 # ~/.config/zsh/aliases
 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME'
+alias dotfiles="/usr/bin/git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME $@"
 
 alias ls="lsd"
 alias l="lsd -lg"
 alias la="lsd -Alg"
-alias lt="lsd --tree --depth 1"
-alias ltt="lsd --tree --depth 2"
+alias lt="lsd -l --tree --depth 1"
+alias lta="lsd -al --tree --depth 1"
+alias ltt="lsd -l --tree --depth 2"
+alias ltta="lsd -al --tree --depth 2"
 
 alias ga="git add"
 alias gss="git status"
