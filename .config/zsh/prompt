@@ -77,13 +77,14 @@ function prompt-length() {
 	typeset -g REPLY=$x
 }
 
+export ZLE_RPROMPT_INDENT=0 # ${ZLE_RPROMPT_INDENT:-1} is standard in zsh, instead default 0
 function fill-line() {
 	emulate -L zsh
 	prompt-length $1
 	local -i left_len=REPLY
 	prompt-length $2 9999
 	local -i right_len=REPLY # -1: don't count the newline char
-	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-0}))
+	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
 	if (( pad_len < 2 )); then
 		# Not enough space for the right part. Drop it.
 		typeset -g REPLY=$1
