@@ -56,6 +56,8 @@ function precmd() {
 
 		unset CMD_START_TIME
 	fi
+
+	TRANSIENT_RPROMPT="%*"
 }
 
 function prompt-length() {
@@ -81,7 +83,7 @@ function fill-line() {
 	local -i left_len=REPLY
 	prompt-length $2 9999
 	local -i right_len=REPLY # -1: don't count the newline char
-	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
+	local -i pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-0}))
 	if (( pad_len < 2 )); then
 		# Not enough space for the right part. Drop it.
 		typeset -g REPLY=$1
@@ -156,7 +158,7 @@ function _transient_prompt_widget-zle-line-finish {
         sysopen -r -o cloexec -u _transient_prompt_fd /dev/null
         zle -F $_transient_prompt_fd _transient_prompt_restore_prompt
     }
-    zle && PROMPT=$TRANSIENT_PROMPT RPROMPT= zle reset-prompt && zle -R
+    zle && PROMPT=$TRANSIENT_PROMPT RPROMPT=$TRANSIENT_RPROMPT zle reset-prompt && zle -R
 }
 
 function _transient_prompt_restore_prompt {
@@ -184,5 +186,3 @@ function _transient_prompt_precmd {
         _transient_prompt_newline=$'\n'
     }
 }
-
-# vim: sw=0 ts=4 sts=4 et
