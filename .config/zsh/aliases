@@ -10,6 +10,7 @@ alias lta="lsd -al --tree --depth 1"
 alias ltt="lsd -l --tree --depth 2"
 alias ltta="lsd -al --tree --depth 2"
 
+alias g="git"
 alias ga="git add"
 alias gss="git status"
 alias gsw="git switch"

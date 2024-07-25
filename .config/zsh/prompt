@@ -13,12 +13,8 @@ zstyle ':vcs_info:git*' actionformats "%F{cyan}%r/%f%F{blue}%S%f [%F{cyan}%b%f (
 setopt prompt_subst no_prompt_{bang,subst} prompt_{cr,percent,sp}
 
 function set_prompt {
-    ## Set the values of PROMPT and RPROMPT here
-    # Sample values given below
-    # PROMPT='%~'$'\n''%# '
-    # RPROMPT='%(?..%B%F{1}%?%f%b)'
 	# set-prompt-1
-		set-prompt-2
+	set-prompt-2
 }
 
 +vi-untracked-git() {
@@ -56,8 +52,6 @@ function precmd() {
 
 		unset CMD_START_TIME
 	fi
-
-	TRANSIENT_RPROMPT="%*"
 }
 
 function prompt-length() {
@@ -77,7 +71,7 @@ function prompt-length() {
 	typeset -g REPLY=$x
 }
 
-export ZLE_RPROMPT_INDENT=0 # ${ZLE_RPROMPT_INDENT:-1} is standard in zsh, instead default 0
+export ZLE_RPROMPT_INDENT=0 # ${ZLE_RPROMPT_INDENT:-1} is standard in zsh, instead set 0
 function fill-line() {
 	emulate -L zsh
 	prompt-length $1
@@ -111,20 +105,22 @@ function set-prompt-2() {
 	local dir
 	set-dir-vcs
 	local top_left="${dir}"
-	local top_right="%F{yellow}${CMD_DURATION_STR}%f %*"
+	TRANSIENT_RPROMPT="%F{yellow}${CMD_DURATION_STR}%f $(date +%T)"
 	local bottom_left='%B%F{%(?.white.red)}$%f%b '
 
 	local REPLY
-	fill-line "$top_left" "$top_right"
+	fill-line "$top_left" "$TRANSIENT_RPROMPT"
 	PROMPT=$REPLY$'\n'$bottom_left
-	unset RPROMPT
+	unset CMD_DURATION_STR
 }
 
 function set-prompt-1() {
 	local dir
 	set-dir-vcs
 	PROMPT="${dir} %B%F{%(?.white.red)}$%f%b "
-	RPROMPT="%F{yellow}${CMD_DURATION_STR}%f %*"
+	RPROMPT="%F{yellow}${CMD_DURATION_STR}%f $(date +%T)"
+	TRANSIENT_RPROMPT=$RPROMPT
+	unset CMD_DURATION_STR
 }
 
 #### Transient prompt with transient newline before prompt
