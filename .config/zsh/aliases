@@ -36,6 +36,10 @@ alias dv="docker volume"
 alias k="kubectl"
 
 alias p="pnpm"
+alias rn="npx react-native"
+alias ncu="npx npm-check-updates"
+
+alias ic="ionic capacitor"
 
 alias v="vim"
 alias vi="vim"
