@@ -1,0 +1,51 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "shift shift": "file_finder::Toggle",
+      "alt-`": "workspace::ToggleBottomDock",
+      "alt-/": "workspace::ToggleRightDock",
+      "alt-b": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-.": "workspace::ToggleVimMode",
+
+      "alt-f": "editor::Format",
+
+      "alt-q": "pane::CloseActiveItem",
+      "alt-h": "workspace::ActivatePaneUp",
+      "alt-j": "workspace::ActivatePaneLeft",
+      "alt-k": "workspace::ActivatePaneRight",
+      "alt-l": "workspace::ActivatePaneDown",
+      "alt-\\": "pane::SplitHorizontal",
+      "alt-|": "pane::SplitVertical",
+
+      "shift-alt-h": "workspace::SwapPaneUp",
+      "shift-alt-j": "workspace::SwapPaneLeft",
+      "shift-alt-k": "workspace::SwapPaneRight",
+      "shift-alt-l": "workspace::SwapPaneDown"
+    }
+  },
+  {
+    "context": "VimControl",
+    "bindings": {
+      // "j k": ["workspace::SendKeystrokes", "escape"]
+
+      "ctrl-w": "pane::CloseActiveItem",
+      "ctrl-s": "workspace::Save",
+      "ctrl-x": "editor::Cut",
+      "ctrl-c": "editor::Copy",
+      "ctrl-v": "editor::Paste"
+    }
+  }
+]

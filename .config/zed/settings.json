@@ -1,0 +1,102 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "vim_mode": true,
+  "relative_line_numbers": true,
+  "vertical_scroll_margin": 10,
+  // "autoscroll_on_clicks": true,
+  "format_on_save": "off",
+
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "XY-Zed"
+  },
+  "current_line_highlight": "all",
+
+  "agent": {
+    "play_sound_when_agent_done": true,
+    "model_parameters": [],
+    "default_profile": "write"
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+
+  "show_whitespaces": "boundary",
+
+  "buffer_font_family": "0xProto Nerd Font",
+  "buffer_font_size": 14,
+  "buffer_line_height": { "custom": 1.2 },
+
+  "agent_font_size": 16,
+  // "agent_font_family": "DejaVu Sans",
+  // "ui_font_size": 15,
+  "ui_font_family": "DejaVu Sans",
+
+  "active_pane_modifiers": {
+    // "magnification": 2,
+    // "border_size": 4,
+    // "inactive_opacity": 0.1
+  },
+
+  // "use_system_path_prompts": false,
+  "auto_signature_help": true,
+  "edit_predictions_disabled_in": ["string", "comment"],
+
+  "toolbar": {
+    "breadcrumbs": false,
+    "selections_menu": false,
+    "quick_actions": false
+  },
+
+  "gutter": {
+    // "code_actions": false,
+    // "runnables": false
+  },
+  "seed_search_query_from_cursor": "selection",
+
+  "inlay_hints": {
+    // "enabled": true
+  },
+  "outline_panel": { "button": false },
+  "collaboration_panel": { "button": false },
+  "notification_panel": { "button": false },
+
+  "tab_size": 2,
+  "tabs": { "file_icons": true },
+
+  "terminal": {
+    "font_family": "CodeNewRoman Nerd Font",
+    "font_size": 15,
+    "shell": {
+      "with_arguments": {
+        "program": "/home/zach/bin/t",
+        "args": []
+      }
+    },
+    "copy_on_select": true,
+    "option_as_meta": true,
+    "line_height": { "custom": 1.25 },
+    "toolbar": {
+      "breadcrumbs": false
+    }
+  },
+
+  "languages": {
+    "TypeScript": {
+      // "language_servers": ["angular", "..."]
+    },
+    "HTML": {
+      "language_servers": ["angular", "..."]
+    }
+  },
+
+  "ssh_connections": [{ "host": "mac.local", "projects": [] }]
+}
