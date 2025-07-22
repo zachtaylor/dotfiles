@@ -1,6 +1,6 @@
 # ~/.config/zsh/aliases
 
-alias dotfiles="/usr/bin/git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME $@"
+alias dotfiles="/usr/bin/git --git-dir=$HOME/.config/dotfiles --work-tree=$HOME \$@"
 
 alias ls="lsd"
 alias l="lsd -lg"
@@ -38,8 +38,10 @@ alias k="kubectl"
 alias p="pnpm"
 alias rn="npx react-native"
 alias ncu="npx npm-check-updates"
-
+alias ionic="npx ionic"
+alias capacitor="npx capacitor"
 alias ic="ionic capacitor"
+alias ng="npx ng"
 
 alias v="vim"
 alias vi="vim"
