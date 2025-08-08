@@ -1,22 +1,17 @@
 {
-  "window.commandCenter": true,
   "editor.minimap.enabled": true,
-  // "editor.minimap.autohide": true,
   // "window.titleBarStyle": "native",
   "window.enableMenuBarMnemonics": false,
   "workbench.externalBrowser": "thorium-browser",
 
   "editor.tabSize": 2,
   "editor.fontFamily": "0xProto Nerd Font",
-  "editor.fontSize": 12, //
-  // "editor.fontSize": 14, // default
-  // "editor.lineHeight": 1.2, //
-  "editor.lineHeight": 1.3, //
-  // "editor.lineHeight": 1.4, // default
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.2,
 
   "terminal.integrated.copyOnSelection": true,
-  "terminal.integrated.fontFamily": "Agave Nerd Font",
-  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontFamily": "MartianMono Nerd Font",
+  "terminal.integrated.fontSize": 12,
   "terminal.integrated.lineHeight": 1,
   "terminal.integrated.shellIntegration.enabled": false,
   "terminal.integrated.profiles.linux": {
@@ -27,14 +22,9 @@
   "terminal.integrated.defaultProfile.linux": "tmux++",
   "terminal.integrated.enablePersistentSessions": false,
 
-  "cursor.composer.shouldAutoScrollToBottom": false,
   "cursor.terminal.usePreviewBox": true,
   "cursor.composer.shouldChimeAfterChatFinishes": true,
-  "cursor.chat.terminalShowHoverHint": false,
   "cursor.composer.backspaceRemoveContext": false,
-
-  "ionic.autoImportIcons": "yes",
-  // "angular2-switcher.openSideBySide": true,
 
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -45,9 +35,8 @@
   "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
 
-  "remote.SSH.remotePlatform": {
-    "mac.local": "macOS"
-  },
+  "remote.SSH.remotePlatform": { "mac.local": "macOS" },
+
   "explorer.confirmPasteNative": false,
-  "workbench.colorTheme": "Monokai"
+  "workbench.colorTheme": "Default Dark Modern"
 }
